@@ -15,17 +15,22 @@ router.get('/quotes/random', (req, res, next) => {
 
 // Search a Quote
 router.get('/quotes/search', (req, res, next) => {
+  const { query } = req.query;
+
   axios
-    .get(`${quoteAPI}/search/quotes`)
+    .get(`${quoteAPI}/search/quotes?query=${query}`)
     .then((response) => res.status(200).json(response.data))
-    .catch((err) => res.json(err));
+    .catch((err) => {
+      res.json(err);
+      console.log(err);
+    });
 });
 
-// Create a Quote in Database ??? Create a quote also in favorites ???
-router.post('/quotes/', (req, res, next) => {
+// Create a Quote in Database and send to User favorites
+router.post('/quotes', (req, res, next) => {
   const { content, author, minLength, maxLength, userId } = req.body;
 
-  Quote.create({ content, author, minLength, maxLength, user: userId })
+  Quote.create({ content, author, minLength, maxLength })
     .then((newQuote) => {
       return User.findByIdAndUpdate(userId, {
         $push: { favorites: newQuote._id },
