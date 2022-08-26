@@ -6,36 +6,26 @@ function capitalize(word) {
 
 const userSchema = new Schema(
   {
-    username: {
-      type: String,
-      trim: true,
-      required: [true, 'Username is required'],
-      unique: [true, 'Username is already taken'],
-    },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: true,
     },
     email: {
       type: String,
       trim: true,
-      required: [true, 'Email is required'],
-      unique: [true, 'Email already exists'],
+      required: true,
+      unique: true,
       lowercase: true,
-      match: [
-        /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
-        'Please use a valid email address',
-      ],
     },
-    firstName: {
+    firstname: {
       type: String,
-      required: [true, 'First name is required'],
+      required: true,
       trim: true,
       set: capitalize,
     },
-    lastName: {
+    lastname: {
       type: String,
-      required: [true, 'Last name is required'],
+      required: true,
       trim: true,
       set: capitalize,
     },
