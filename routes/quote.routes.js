@@ -14,8 +14,8 @@ router.get('/quotes/random', (req, res, next) => {
 });
 
 // Search a Quote from external API
-router.get('/quotes/search', (req, res, next) => {
-  const { query } = req.query;
+router.put('/quotes/search', (req, res, next) => {
+  const { query } = req.body;
   axios
     .get(`${quoteAPI}/search/quotes?query=${query}`)
     .then((response) => res.status(200).json(response.data))
