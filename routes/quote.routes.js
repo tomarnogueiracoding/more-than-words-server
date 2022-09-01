@@ -17,7 +17,7 @@ router.get('/quotes/random', (req, res, next) => {
 router.get('/quotes/search', (req, res, next) => {
   const { query } = req.body;
   axios
-    .get(`${quoteAPI}/search/quotes?query=${query}`)
+    .get(`${quoteAPI}/search/quotes`)
     .then((response) => res.status(200).json(response.data))
     .catch((err) => {
       res.json(err);
