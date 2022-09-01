@@ -14,7 +14,7 @@ router.get('/quotes/random', (req, res, next) => {
 });
 
 // Search a Quote from external API
-router.put('/quotes/search', (req, res, next) => {
+router.get('/quotes/search', (req, res, next) => {
   const { query } = req.body;
   axios
     .get(`${quoteAPI}/search/quotes?query=${query}`)
@@ -72,15 +72,23 @@ router.put('/quotes/:quoteId', (req, res, next) => {
 });
 
 // Delete One Quote by ID from the Database
-router.delete('/quotes/:quoteId', (req, res, next) => {
-  const { quoteId } = req.params;
+router.delete('/quotes/:quoteId/:userId', (req, res, next) => {
+  const { quoteId, userId } = req.params;
 
   Quote.findByIdAndDelete(quoteId)
-    .then(() =>
+    .then(() => {
+      return User.findByIdAndUpdate(userId, {
+        $pull: {
+          favorites: quoteId,
+        },
+      });
+    })
+    .then(() => {
       res.status(200).json({
         message: `The quote with the id ${quoteId} was sucefully deleted`,
-      })
-    )
+      });
+    })
+
     .catch((err) => res.json(err));
 });
 
